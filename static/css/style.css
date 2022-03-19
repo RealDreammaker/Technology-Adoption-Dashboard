@@ -3,11 +3,22 @@ body {
   margin: 0;
 }
 
-#map,
+#map { 
+  height: 500px; 
+  width: 800px; 
+}
+
+#scatter { 
+  height: 500px; 
+  width: 800px; 
+}
+
+
+/* #map,
 body,
 html {
   height: 100%;
-}
+} */
 
 .legend {
   line-height: 18px;

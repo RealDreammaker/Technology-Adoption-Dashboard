@@ -18,7 +18,7 @@ function makeResponsive() {
     var selectedYear = "2019";
 
     // clear existing svg area if there was one
-    var svgArea = d3.select("svg");
+    var svgArea = d3.selectAll("svg");
     if (!svgArea.empty()){
         svgArea.remove()
     };
