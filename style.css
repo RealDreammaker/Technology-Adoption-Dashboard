@@ -1,0 +1,29 @@
+h1 {
+    text-align: center;
+    color: white;
+  }
+p {
+      text-align:justify; 
+      padding-top: 30px;
+      padding-right: 200px;
+      padding-left: 200px;
+      padding-bottom: 80px;     
+  }
+#navbar {
+    position: sticky;
+    top:0;
+    z-index:10;
+}
+.row {
+  padding-left: 50px;
+  padding-right: 50px;
+}
+.navbar-nav li a{
+ font-size: small;
+
+}
+  @media screen and (max-width: 500px) {
+    .column {
+      width: 100%;
+    }
+  }
