@@ -1,29 +1,44 @@
 h1 {
     text-align: center;
     color: white;
-  }
+}
 p {
       text-align:justify; 
       padding-top: 30px;
       padding-right: 100px;
       padding-left: 100px;
       padding-bottom: 80px;     
-  }
-#navbar {
-    position: sticky;
-    top:0;
-    z-index:10;
 }
 .row {
+  padding-top: 50px;
   padding-left: 50px;
   padding-right: 50px;
 }
+.form-check {
+  padding-left: 60px;
+  padding-right: 60px;
+}
 .navbar-nav li a{
  font-size: small;
+}
+#navbar {
+  position: fixed;
+  top:0;
+  width: 100%;
+}
+.form-check {
+  width: 600px;
+  padding-top: 50px;
+}
+.btn-group {
+  padding-top: 50px;
+  padding-left:30px;
+  font-size: x-large;
 
 }
-  @media screen and (max-width: 500px) {
+
+@media screen and (max-width: 500px) {
     .column {
       width: 100%;
-    }
-  }
+}
+}
