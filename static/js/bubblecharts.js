@@ -1,21 +1,32 @@
 // requirement: data from 3 sources
 // input: country name and year
-// 
+var selectedCountries = ["Australia","Germany","Japan", "Russia","China","Canada", "Brazil", "Mexico"];
+var selectedYear = "2019"; 
+var lightColor = ["green","purple","yellow","pink","orange","cyan","magenta","red","blue","lime"];
+
+const teleData = "../data/fixed-landline-telephone-subscriptions-vs-GDP-per-capita.csv"
+const teleDataColHeading = "Fixed telephone subscriptions (per 100 people)";
+
+const mobiData = "../data/mobile-phone-subscriptions-vs-gdp-per-capita.csv"
+const mobiDataColHeading = "Mobile cellular subscriptions (per 100 people)";
+
+// const roadData = "../data/road-vehicles-per-1000-inhabitants-vs-gdp-per-capita.csv"
+// const roadDataColHeading = "Motor vehicles per 1000 people (NationMaster (2014))";
+var selectedDataSet = teleData
 
 // create a responsive chart
 function makeResponsive() {
-
+    
     // **************** SETTING UP SVG AREA  ****************
     // ******************************************************
     // delare constants
     const marginForLabel = 80;
     const animateDudation = 1000;
     const circleOpacity = 0.5; 
-    const circleColor = "royalblue";
+    // const circleColor = "royalblue";
     const highlightColor = "yellow";
-    const tech1 = "Fixed telephone subscriptions (per 100 people)";
-    var selectedCountry = ["Australia","Germany","Japan", "Russia","China"];
-    var selectedYear = "2019";
+    
+
 
     // clear existing svg area if there was one
     var svgArea = d3.selectAll("svg");
@@ -49,8 +60,20 @@ function makeResponsive() {
     var chartGroup = svg.append("g")
                         .attr("transform",`translate(${margin.left},${margin.top})`);
 
-    // setup default labels
-    var chosenYLabel =  tech1
+    // setup labels
+    var chosenYLabel;
+    if (selectedDataSet === teleData) {
+        chosenYLabel = teleDataColHeading;
+    }
+    else if (selectedDataSet === mobiData){
+        chosenYLabel = mobiDataColHeading;
+    }
+    // else if (selectedDataSet === roadData){
+    //     chosenYLabel = roadDataColHeading;
+    // };
+    console.log(chosenYLabel)
+    console.log(selectedDataSet)
+
     var chosenXLabel =  "GDP per capita, PPP (constant 2017 international $)"
 
     // ******************************************************
@@ -58,19 +81,27 @@ function makeResponsive() {
     // ******************************************************
     
     // function for setting up scales
+
     function xScaleF(data, chosenXAxis){
-    var xLinearScale = d3.scaleLinear()
-    .domain([d3.min(data, d => d[chosenXAxis]) * 0.8,
-    d3.max(data, d => d[chosenXAxis]) * 1.23 ])
-    .range([0,chartWidth]);
-    return xLinearScale;
+        
+        var xLinearScale = d3.scaleLinear()
+        .domain([
+            d3.min(data, d => d[chosenXAxis]) * 0.8,
+            d3.max(data, d => d[chosenXAxis]) * 1.23 
+        ])
+        .range([0,chartWidth]);
+        
+        return xLinearScale;
     };
     
     function yScaleF(data, chosenYAxis){
         var yLinearScale = d3.scaleLinear()
-        .domain([d3.min(data, d => d[chosenYAxis]) * 0.8,
-        d3.max(data, d => d[chosenYAxis]) *1.23])
+        .domain([
+            d3.min(data, d => d[chosenYAxis]) * 0.8,
+            d3.max(data, d => d[chosenYAxis]) *1.23
+        ])
         .range([chartHeight,0]);
+        
         return yLinearScale;
     };  
     
@@ -166,19 +197,6 @@ function makeResponsive() {
     // functions for updating TOOLTIPS
     function updatingTooltips(circlesGroup, temCircle, textGroup, chosenXLabel,chosenYLabel){
 
-        // depending on type of data to show, there could be percentage sign to show
-        // var percentageLabels = ["telephone","GDP","obesity","smokes"]
-        
-        // var xAxisUnit = "";
-        // if (percentageLabels.includes(chosenXLabel)){
-        //     xAxisUnit = "%";
-        //     };
-
-        // var yAxisUnit = "";
-        // if (percentageLabels.includes(chosenYLabel)){
-        //     yAxisUnit = "%";
-        //     };
-
         var toolTip = d3.tip()
             .attr("class", "d3-tip")
             .offset([60, -70])
@@ -194,7 +212,6 @@ function makeResponsive() {
             toolTip.show(d, this);
 
             d3.select(this)
-                .attr("fill", highlightColor)
                 .attr("opacity", 1);
 
             // show temporary circle
@@ -209,7 +226,6 @@ function makeResponsive() {
             toolTip.hide(d);
 
             d3.select(this)
-                .attr("fill",circleColor)
                 .attr("opacity", circleOpacity);
             // hide temporary circle
             temCircle
@@ -226,7 +242,6 @@ function makeResponsive() {
             .attr("r",d3.select(this).attr("alt"))
             .attr("stroke","blue")
             .attr("stroke-width",2)
-            .attr("fill", highlightColor)
             .attr("opacity", 1)
             .style("z-index",-1)
         })
@@ -249,15 +264,23 @@ function makeResponsive() {
     // ******* DATA EXTRACTION and CHARTS SKETCHING *********
     // ******************************************************
     // 
-    d3.csv("../data/fixed-landline-telephone-subscriptions-vs-GDP-per-capita.csv").then(function(rawdata){
+    d3.csv(selectedDataSet).then(function(rawdata){
 
         console.log(rawdata)
         console.log("Year:" + selectedYear)
-        console.log("Countries:" +selectedCountry)
+        console.log("Countries:" +selectedCountries)
 
+        // filter data by removing null value in data column
+        var filteredData = rawdata.filter(function(d){
+            if (d[chosenYLabel] != "")  {
+                return d;
+            }
+        });
+        console.log(filteredData)
+        
         // filter rawdata by year and selected countries
-        data = rawdata.filter(function(d){
-            if ((d.Year == selectedYear) && (selectedCountry.includes(d.Entity))) {
+        data = filteredData.filter(function(d){
+            if ((d.Year == selectedYear) && (selectedCountries.includes(d.Entity))) {
                 return d;
             }
         });
@@ -295,8 +318,10 @@ function makeResponsive() {
             .append("circle")
                 .attr("class", "circles")
                 .attr("r", d => parseInt(d[chosenYLabel]))
-                .attr("fill",circleColor)
+                // .attr("fill",circleColor)
                 .attr("opacity", circleOpacity)
+                // choose color based on index of seleted country
+                .attr("fill",d => lightColor[selectedCountries.indexOf(d.Entity)] )
 
         // update circles 
         circlesGroup = circlesGroupF(circlesGroup,xScale,yScale,chosenXLabel,chosenYLabel);
@@ -392,10 +417,14 @@ function makeResponsive() {
             };
         });
 
+    updateMap(selectedCountries,selectedYear, filteredData ,chosenYLabel)    
+
     }).catch(function(error){
         return console.warn(error);
     });
 };
+
+
 
 makeResponsive();
 
