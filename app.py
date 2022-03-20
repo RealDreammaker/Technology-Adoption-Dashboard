@@ -2,7 +2,8 @@
 from flask import Flask, render_template
 import os
 from sqlalchemy.orm import Session
-from sqlalchemy import  Column, Integer, String, Float, JSON
+from sqlalchemy import  Column, Integer, String, Float
+from sqlalchemy.dialects.postgresql import JSONB
 
 from flask import Flask, jsonify
 
@@ -49,7 +50,7 @@ class Fixed(db.Model):
 
 class Geojson(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    geojson = db.Column(db.JSON)
+    geojson = db.Column(db.JSONB)
 
 ###ROUTES###
 #render index.html
