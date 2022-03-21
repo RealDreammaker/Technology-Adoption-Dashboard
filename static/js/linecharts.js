@@ -1,3 +1,20 @@
+// Link requirements data from 3 sources
+// input country name & year
+
+// var selectedCountries = ["Australia","Germany","Japan", "Russia","China","Canada", "Brazil", "Mexico"];
+// var selectedYear = "2019"; 
+// var lightColor = ["green","purple","yellow","pink","orange","cyan","magenta","red","blue","lime"];
+
+// const teleData = "../data/fixed-landline-telephone-subscriptions-vs-GDP-per-capita.csv"
+// const teleDataColHeading = "Fixed telephone subscriptions (per 100 people)";
+
+// const mobiData = "../data/mobile-phone-subscriptions-vs-gdp-per-capita.csv"
+// const mobiDataColHeading = "Mobile cellular subscriptions (per 100 people)";
+
+// const roadData = "../data/road-vehicles-per-1000-inhabitants-vs-gdp-per-capita.csv"
+// const roadDataColHeading = "Motor vehicles per 1000 people (NationMaster (2014))";
+// var selectedDataSet = teleData
+
 // set the dimensions and margins of the graph
 var margin = {top: 10, right: 30, bottom: 30, left: 60},
     width = 460 - margin.left - margin.right,
