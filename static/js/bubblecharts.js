@@ -418,7 +418,8 @@ function makeResponsive() {
         });
 
     updateMap(selectedCountries,selectedYear, filteredData ,chosenYLabel)    
-
+    updateLineChart(selectedCountries,selectedYear, filteredData ,chosenYLabel)
+        
     }).catch(function(error){
         return console.warn(error);
     });
