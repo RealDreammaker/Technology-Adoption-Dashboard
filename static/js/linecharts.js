@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // Link requirements data from 3 sources
 // input country name & year
 
@@ -34,7 +33,7 @@ var svg = d3.select("#my_dataviz")
 var selectedTech = 0;
 
 
-var tech_source = ["../data/mobile-cellular-subscriptions-per-100-people.csv", "../data/blahTech.csv"];
+var tech_source = ["../data/mobile-phone-subscriptions-vs-gdp-per-capita.csv", "../data/blahTech.csv"];
 
 var d3MobileTech = function(data) {
   var mobile_data = "Mobile cellular subscriptions (per 100 people)";
@@ -118,8 +117,3 @@ var tech_list = [d3MobileTech, d3BlahTech]
 
 //Read the data
 d3.csv(tech_source[selectedTech], tech_list[selectedTech])
-=======
-function updateLineChart(selectedCountries,selectedYear, filteredData ,chosenYLabel){
-
-};
->>>>>>> 3a1b6793c785c4906893c016ac181c400bdb0ca7
