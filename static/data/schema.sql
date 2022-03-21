@@ -2,7 +2,7 @@ create table fixed_telephone(
 	entity varchar(50),
 	code varchar(10),
 	year int,
-	fixed_subcriptions float,
+	fixed_subscriptions float,
 	gdp float
 );
 
@@ -10,7 +10,7 @@ create table mobile_telephone(
 	entity varchar(50),
 	code varchar(10),
 	year int,
-	fixed_subcriptions float,
+	mobile_subscriptions float,
 	gdp float
 );
 
