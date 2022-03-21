@@ -19,6 +19,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
+db.drop_all()
 db.create_all()
 
 #create classes for tables
@@ -28,7 +29,7 @@ class Mobile(db.Model):
     entity = db.Column(db.String(255))
     code = db.Column(db.String(255))
     year = db.Column(db.Integer)
-    mobile_subscriptions_per_hundred = db.Column(db.Float)
+    mobile_subscriptions = db.Column(db.Float)
     gdp = db.Column(db.Float)
 
 class Fixed(db.Model):
@@ -37,7 +38,7 @@ class Fixed(db.Model):
     entity = db.Column(db.String(255))
     code = db.Column(db.String(255))
     year = db.Column(db.Integer)
-    fixed_subscriptions_per_hundred = db.Column(db.Float)
+    fixed_subscriptions = db.Column(db.Float)
     gdp = db.Column(db.Float)
 
 class Geojson(db.Model):
@@ -55,18 +56,20 @@ def home():
 @app.route('/api/fixed')
 def fixed():
 
-    fixed_results = db.session.query(Fixed.entity, Fixed.code, Fixed.year, Fixed.fixed_subscriptions_per_hundred, Fixed.gdp).all()
+    fixed_results = db.session.query(Fixed.entity, Fixed.code, Fixed.year, Fixed.fixed_subscriptions, Fixed.gdp).all()
 
     entity = [result[0] for result in fixed_results]
     code = [result[1] for result in fixed_results]
     year = [result[2] for result in fixed_results]
     subscriptions = [result[3] for result in fixed_results]
+    gdp = [result[4] for result in fixed_results]
 
     fixed_data = [{
         "entity":entity,
         "code":code,
         "year":year,
-        "subscriptions":subscriptions
+        "subscriptions":subscriptions,
+        "gdp":gdp
     }]
 
     return jsonify(fixed_data)
@@ -74,18 +77,20 @@ def fixed():
 @app.route('/api/mobile')
 def mobile():
 
-    mobile_results = db.session.query(Mobile.entity, Mobile.code, Mobile.year, Mobile.mobile_subscriptions_per_hundred, Fixed.gdp).all()
+    mobile_results = db.session.query(Mobile.entity, Mobile.code, Mobile.year, Mobile.mobile_subscriptions, Mobile.gdp).all()
 
     entity = [result[0] for result in mobile_results]
     code = [result[1] for result in mobile_results]
     year = [result[2] for result in mobile_results]
     subscriptions = [result[3] for result in mobile_results]
+    gdp = [result[4] for result in mobile_results]
 
     mobile_data = [{
         "entity":entity,
         "code":code,
         "year":year,
-        "subscriptions":subscriptions
+        "subscriptions":subscriptions,
+        "gdp":gdp
     }]
 
     return jsonify(mobile_data)
