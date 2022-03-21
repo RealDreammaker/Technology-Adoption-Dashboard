@@ -4,7 +4,7 @@ var selectedCountries = ["Australia","Germany","Japan", "Russia","China","Canada
 var selectedYear = "2019"; 
 var lightColor = ["green","purple","yellow","pink","orange","cyan","magenta","red","blue","lime"];
 
-const teleData = "../data/fixed-landline-telephone-subscriptions-vs-GDP-per-capita.csv"
+const teleData = "../static/data/fixed-landline-telephone-subscriptions-vs-GDP-per-capita.csv"
 const teleDataColHeading = "Fixed telephone subscriptions (per 100 people)";
 
 const mobiData = "../data/mobile-phone-subscriptions-vs-gdp-per-capita.csv"
@@ -418,7 +418,7 @@ function makeResponsive() {
         });
 
     updateMap(selectedCountries,selectedYear, filteredData ,chosenYLabel)    
-    updateLineChart(selectedCountries,selectedYear, filteredData ,chosenYLabel)
+    // updateLineChart(selectedCountries,selectedYear, filteredData ,chosenYLabel)
         
     }).catch(function(error){
         return console.warn(error);

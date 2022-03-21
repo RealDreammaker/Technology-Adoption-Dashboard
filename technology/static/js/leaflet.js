@@ -43,7 +43,7 @@ function updateMap(selectedCountries,selectedYear,filteredData,chosenYLabel){
     .attr("id","map")
 
   // Read in country boundaries
-  d3.json("../data/countries.geojson").then(function(countriesData){
+  d3.json("../static/data/countries.geojson").then(function(countriesData){
   
     // create tile layer
     var outdoors = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
