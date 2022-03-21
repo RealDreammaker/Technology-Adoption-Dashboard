@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // Link requirements data from 3 sources
 // input country name & year
 
@@ -117,3 +118,8 @@ var tech_list = [d3MobileTech, d3BlahTech]
 
 //Read the data
 d3.csv(tech_source[selectedTech], tech_list[selectedTech])
+=======
+function updateLineChart(selectedCountries,selectedYear, filteredData ,chosenYLabel){
+
+};
+>>>>>>> 3a1b6793c785c4906893c016ac181c400bdb0ca7
