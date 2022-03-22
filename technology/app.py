@@ -61,12 +61,11 @@ def mobile():
 
     return jsonify(mobile_data)
 
-# not working route
-# @app.route('/api/geojson')
-# def geojson():
-#     geojson_results = db.session.query(Geojson.geojson)
-#     # geojson = [result[0] for result in geojson_results]
-#     return jsonify(geojson_results)
+@app.route('/api/countries')
+def countries():
+    country_results = db.session.query(Countries.entity,Countries.id)
+    country_data = [result[0] for result in country_results]
+    return jsonify(country_data)
 
 if __name__ == '__main__':
     app.run(debug=True)
