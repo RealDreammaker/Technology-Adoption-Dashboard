@@ -13,7 +13,7 @@ const chosenYLabel = "subscriptions";
 const chosenXLabel =  "gdp"
 
 // delare default attributes 
-const marginForLabel = 80;
+const marginForLabel = 15;
 const animateDudation = 1000;
 const circleOpacity = 0.5; 
 // create a responsive chart to window size
@@ -31,14 +31,14 @@ function makeResponsive() {
     };
 
     // set up responsive chart size, width is set to ensure no overlapping datapoint
-    var svgWidth = document.getElementById('scatter').offsetWidth*5/12 
-    var svgWidth = 600
+    var svgWidth = document.getElementById('scatter').offsetWidth 
+    // var svgWidth = 500
     var svgHeight = svgWidth * .7;
 
     // set margins for chart area
     var margin = {
         top: 5,
-        bottom: 35 + marginForLabel,
+        bottom: 35 + marginForLabel * 2,
         left: 35 + marginForLabel,
         right: 5
     };
@@ -159,7 +159,7 @@ function makeResponsive() {
     };
 
     // functions for creating AXIS LABELS
-    function createLabel(labelgroup, id, labelText, indentLevel, statusClass, transform = "no"){
+    function createLabel(labelgroup, id, labelText, statusClass, transform = "no"){
         // position and orientation of label depend on passing-in variables
         if (transform != "no"){
             var labelItem = labelgroup
@@ -169,7 +169,7 @@ function makeResponsive() {
                     .attr("id", id)
                     .attr("transform", "rotate(-90)")
                     .attr("x", -chartHeight/2)
-                    .attr("y", -margin.left + (marginForLabel/3) * indentLevel )
+                    .attr("y", -margin.left + marginForLabel  )
                     .style("text-anchor","middle")
                     .text(labelText)
         }
@@ -180,7 +180,7 @@ function makeResponsive() {
                     .attr("class", statusClass + " aText")
                     .attr("id", id)
                     .attr("x", chartWidth/2 )
-                    .attr("y", chartHeight + 15 + (marginForLabel/3) * indentLevel)
+                    .attr("y", chartHeight + 15 + marginForLabel )
                     .style("text-anchor","middle")
                     .text(labelText)
         };
@@ -351,8 +351,8 @@ function makeResponsive() {
         // add labels for all axis
         var labelGroup = chartGroup.append("g");
 
-        createLabel(labelGroup, "mobile", YLabel ,1 , "active", "transform")
-        createLabel(labelGroup, "GDP", XLabel ,1 , "active")
+        createLabel(labelGroup, "mobile", YLabel  , "active", "transform")
+        createLabel(labelGroup, "GDP", XLabel  , "active")
 
     updateMap(selectedCountries, selectedYear, filteredData , chosenYLabel)    
     updateLineChart(selectedCountries,selectedYear, filteredData ,chosenYLabel, lightColors)
