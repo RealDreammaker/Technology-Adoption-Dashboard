@@ -1,4 +1,5 @@
 ###DEPENDENCIES###
+from html.entities import entitydefs
 from flask import Flask, render_template
 import os
 from sqlalchemy.orm import Session
@@ -12,7 +13,7 @@ app = Flask(__name__)
 ###DATABASE SETUP###
 from flask_sqlalchemy import SQLAlchemy
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', '') or "postgresql://postgres:38364431@localhost:5432/technology_db"
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', '') or "postgresql://postgres:postgres@localhost:5432/technology_db"
 
 # Remove tracking modifications
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -32,8 +33,9 @@ class Mobile(db.Model):
     mobile_subscriptions = db.Column(db.Float)
     gdp = db.Column(db.Float)
 
-class Geojson(db.Model):
-    geojson = db.Column(db.JSON)
+class Countries(db.Model):
+    __tablename__ = 'countries'
+    entity = db.Column(db.String(255))
     id = db.Column(db.Integer, primary_key=True)
 
 ###ROUTES###
@@ -62,11 +64,16 @@ def mobile():
     return jsonify(mobile_data)
 
 # not working route
-# @app.route('/api/geojson')
-# def geojson():
-#     geojson_results = db.session.query(Geojson.geojson)
-#     # geojson = [result[0] for result in geojson_results]
-#     return jsonify(geojson_results)
+@app.route('/api/countries')
+def countries():
+     country_results = db.session.query(Countries.entity)
+     country_data = []
+     for entity in country_results:
+         dict_var={}
+         dict_var['entity'] = entity
+
+         country_data.append(dict_var)
+     return jsonify(country_data)
 
 if __name__ == '__main__':
     app.run(debug=True)
