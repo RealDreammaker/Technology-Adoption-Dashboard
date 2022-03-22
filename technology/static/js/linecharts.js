@@ -19,19 +19,33 @@
 
 function updateLineChart(selectedCountries,selectedYear,filteredData,chosenYLabel, lightColors){
 
-var margin = {top: 10, right: 30, bottom: 30, left: 60},
-    width = 600 - margin.left - margin.right,
-    height = svgWidth * .7 - margin.top - margin.bottom;
+  // clear existing svg area if there was one
+  var svgArea = d3.select("#my_dataviz").selectAll("svg");
+  if (!svgArea.empty()){
+      svgArea.remove()
+  };
 
-// append the svg object to the body of the page
-var svg = d3.select("#my_dataviz")
-  .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")");
-          
+  var svgWidth = document.getElementById('my_dataviz').offsetWidth 
+  // var svgWidth = 500
+  var svgHeight = svgWidth * .7;
+
+  var margin = {top: 0, 
+    right: 0, 
+    bottom: 35, 
+    left: 35},
+
+    chartWidth = svgWidth - margin.left - margin.right,
+    chartHeight = svgHeight - margin.top - margin.bottom;
+
+  // append the svg object to the body of the page
+  var svg = d3.select("#my_dataviz")
+    .append("svg")
+      .attr("width", svgWidth)
+      .attr("height", svgHeight)
+
+      var chartGroup = svg.append("g")
+          .attr("transform",`translate(${margin.left},${margin.top})`);
+            
 
 // var tech_source = ["../data/mobile-phone-subscriptions-vs-gdp-per-capita.csv", "../data/blahTech.csv"];
 
@@ -60,22 +74,22 @@ var svg = d3.select("#my_dataviz")
   // Add X axis --> it is a date format
   var x = d3.scaleLinear()
     .domain([1987,2021])
-    .range([ 0, width ]);
+    .range([ 0, chartWidth ]);
 
-  svg.append("g")
-    .attr("transform", "translate(0," + height + ")")
+  chartGroup.append("g")
+    .attr("transform", "translate(0," + chartHeight + ")")
     .call(d3.axisBottom(x).ticks(7));
 
   // Add Y axis
   var y = d3.scaleLinear()
     .domain([0, d3.max(filteredData, function(d) { return +d[chosenYLabel]; })])
-    .range([ height, 0 ]);
-  svg.append("g")
+    .range([ chartHeight, 0 ]);
+  chartGroup.append("g")
     .call(d3.axisLeft(y));
 
   // Initialize line with first group of the list 'lightColors
   for (i=0; i<selectedCountries.length; i++){
-    var line = svg
+    var line = chartGroup
       .append('g')
       .append("path")
         .datum(filteredData.filter(function(d){
