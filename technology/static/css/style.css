@@ -2,11 +2,11 @@ body {
   padding: 0;
   margin: 0;
 }
-
+ 
 #map { 
   height: 500px; 
-  width: 800px; 
-}
+  width: 1500px; 
+} 
 
 #scatter { 
   height: 500px; 

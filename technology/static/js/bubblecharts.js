@@ -2,7 +2,7 @@
 // input data: an array of country names and selected year
 var selectedCountries = ["Australia","Germany","Japan", "Russia","China","Canada", "Brazil", "Mexico"];
 var selectedYear = "2019"; 
-var lightColor = ["lime","cyan","green","purple","yellow","orange","magenta","red","blue","pink"];
+var lightColors = ["lime","cyan","green","purple","yellow","orange","magenta","red","blue","pink"];
 
 // const selectedDataSet = "../static/data/mobile-phone-subscriptions-vs-gdp-per-capita.csv"
 const YLabel = "Mobile cellular subscriptions (per 100 people)";
@@ -11,16 +11,18 @@ const XLabel =  "GDP per capita, PPP (constant 2017 international $)"
 const selectedDataSet = "/api/mobile"
 const chosenYLabel = "subscriptions";
 const chosenXLabel =  "gdp"
+
+// delare default attributes 
+const marginForLabel = 80;
+const animateDudation = 1000;
+const circleOpacity = 0.5; 
 // create a responsive chart to window size
 function makeResponsive() {
     
     // ******************************************************
     // **************** SETTING UP SVG AREA  ****************
     // ******************************************************
-    // delare default attributes 
-    const marginForLabel = 80;
-    const animateDudation = 1000;
-    const circleOpacity = 0.5; 
+
     
     // clear existing svg area if there was one
     var svgArea = d3.selectAll("svg");
@@ -29,7 +31,8 @@ function makeResponsive() {
     };
 
     // set up responsive chart size, width is set to ensure no overlapping datapoint
-    var svgWidth = document.getElementById('scatter').offsetWidth
+    var svgWidth = document.getElementById('scatter').offsetWidth*5/12 
+    var svgWidth = 600
     var svgHeight = svgWidth * .7;
 
     // set margins for chart area
@@ -311,10 +314,10 @@ function makeResponsive() {
             .enter()
             .append("circle")
                 .attr("class", "circles")
-                .attr("r", d => parseInt(d[chosenYLabel]))
+                .attr("r", d => parseInt(d[chosenYLabel]/5))
                 .attr("opacity", circleOpacity)
                 // choose color based on index of seleted country
-                .attr("fill",d => lightColor[selectedCountries.indexOf(d.entity)] )
+                .attr("fill",d => lightColors[selectedCountries.indexOf(d.entity)] )
 
         // update circles 
         circlesGroup = circlesGroupF(circlesGroup,xScale,yScale,chosenXLabel,chosenYLabel);
@@ -329,7 +332,7 @@ function makeResponsive() {
                 //adjusted so text-anchor can move vertically
                 .attr("dy","0.3em")
                 // stamp alt details for  referencing later on
-                .attr("alt",d => parseInt(d[chosenYLabel]))
+                .attr("alt",d => parseInt(d[chosenYLabel]/5))
                 .text(d => d.entity.substring(0,2).toUpperCase())
                 .text(d => d.entity)
 
@@ -352,7 +355,7 @@ function makeResponsive() {
         createLabel(labelGroup, "GDP", XLabel ,1 , "active")
 
     updateMap(selectedCountries, selectedYear, filteredData , chosenYLabel)    
-    // updateLineChart(selectedCountries,selectedYear, filteredData ,chosenYLabel)
+    updateLineChart(selectedCountries,selectedYear, filteredData ,chosenYLabel, lightColors)
         
     }).catch(function(error){
         return console.warn(error);
