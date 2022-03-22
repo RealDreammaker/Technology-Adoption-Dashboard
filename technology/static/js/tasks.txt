@@ -1,2 +1,0 @@
-- ensuring all three visual reflects selected data input such as year, group of countries, and technology dataset 
-matching color country based on value, using hsl color converted to hex
