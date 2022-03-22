@@ -1,6 +1,18 @@
 # Project_2
 
+**Project team:**
+Kelvin Nguyen,
+Matt Suffra,
+Anita Rynkanen,
+Raymond Chau
 
-* [Dataset](https://ourworldindata.org/technology-adoption)
+**Data source**
+* [Our World in Data](https://ourworldindata.org/technology-adoption)
 
-* [Project proposal](https://docs.google.com/document/d/1WuXtjEu_4yP9bqrYKtSxezkih-kNpky11a9ftDdth68/edit)
+**Project proposal**
+ 
+For this project we explored the dataset related to adoption of mobile phones across different countries between 1960 and 2019. 
+We have created a dashboard with 3 visualizations that include a heat map, line chart and bubble chart with an ability to change the charts based on the country selection. These visualisations show the number of mobile telephone subscriptions, measured as the number per 100 people versus gross domestic product (GDP) per capita.
+
+**Project requirements**
+
