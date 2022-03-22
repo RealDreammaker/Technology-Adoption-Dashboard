@@ -1,7 +1,9 @@
-/static/js/config.js
-/static/js/leaflet copy.js
-/static/js/logic.js
-/static/js/tasks.txt
+/technology/static/js/config.js
+/technology/static/js/leaflet copy.js
+/technology/static/js/leaflet copy 2.js
+/technology/static/js/logic.js
+/technology/static/js/tasks.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

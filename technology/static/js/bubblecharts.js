@@ -1,33 +1,24 @@
-// requirement: data from 3 sources
-// input: country name and year
+// requirement:
+// input data: an array of country names and selected year
 var selectedCountries = ["Australia","Germany","Japan", "Russia","China","Canada", "Brazil", "Mexico"];
 var selectedYear = "2019"; 
-var lightColor = ["green","purple","yellow","pink","orange","cyan","magenta","red","blue","lime"];
+var lightColor = ["lime","cyan","green","purple","yellow","orange","magenta","red","blue","pink"];
 
-const teleData = "../static/data/fixed-landline-telephone-subscriptions-vs-GDP-per-capita.csv"
-const teleDataColHeading = "Fixed telephone subscriptions (per 100 people)";
+const selectedDataSet = "../static/data/mobile-phone-subscriptions-vs-gdp-per-capita.csv"
+const chosenYLabel = "Mobile cellular subscriptions (per 100 people)";
+const chosenXLabel =  "GDP per capita, PPP (constant 2017 international $)"
 
-const mobiData = "../data/mobile-phone-subscriptions-vs-gdp-per-capita.csv"
-const mobiDataColHeading = "Mobile cellular subscriptions (per 100 people)";
-
-// const roadData = "../data/road-vehicles-per-1000-inhabitants-vs-gdp-per-capita.csv"
-// const roadDataColHeading = "Motor vehicles per 1000 people (NationMaster (2014))";
-var selectedDataSet = teleData
-
-// create a responsive chart
+// create a responsive chart to window size
 function makeResponsive() {
     
+    // ******************************************************
     // **************** SETTING UP SVG AREA  ****************
     // ******************************************************
-    // delare constants
+    // delare default attributes 
     const marginForLabel = 80;
     const animateDudation = 1000;
     const circleOpacity = 0.5; 
-    // const circleColor = "royalblue";
-    const highlightColor = "yellow";
     
-
-
     // clear existing svg area if there was one
     var svgArea = d3.selectAll("svg");
     if (!svgArea.empty()){
@@ -58,30 +49,17 @@ function makeResponsive() {
 
     // append chartgroup to svg area
     var chartGroup = svg.append("g")
-                        .attr("transform",`translate(${margin.left},${margin.top})`);
+        .attr("transform",`translate(${margin.left},${margin.top})`);
 
-    // setup labels
-    var chosenYLabel;
-    if (selectedDataSet === teleData) {
-        chosenYLabel = teleDataColHeading;
-    }
-    else if (selectedDataSet === mobiData){
-        chosenYLabel = mobiDataColHeading;
-    }
-    // else if (selectedDataSet === roadData){
-    //     chosenYLabel = roadDataColHeading;
-    // };
+
     console.log(chosenYLabel)
     console.log(selectedDataSet)
-
-    var chosenXLabel =  "GDP per capita, PPP (constant 2017 international $)"
 
     // ******************************************************
     // *************** SETTING UP FUNCTIONS *****************
     // ******************************************************
     
-    // function for setting up scales
-
+    // function for setting up scales for X axis
     function xScaleF(data, chosenXAxis){
         
         var xLinearScale = d3.scaleLinear()
@@ -94,7 +72,9 @@ function makeResponsive() {
         return xLinearScale;
     };
     
+    // function for setting up scales for Y axis
     function yScaleF(data, chosenYAxis){
+
         var yLinearScale = d3.scaleLinear()
         .domain([
             d3.min(data, d => d[chosenYAxis]) * 0.8,
@@ -105,21 +85,26 @@ function makeResponsive() {
         return yLinearScale;
     };  
     
-    // functions for creating axis
+    // functions for creating X axis
     function xAxisF(xAxisPassIn, newXAxisScale){
+
         var xAxis = d3.axisBottom(newXAxisScale)
             .tickSizeOuter(15)
             .tickSizeInner(6)
             .ticks(7);
+
         xAxisPassIn
             .attr("transform",`translate(0,${chartHeight})`)
             .transition()
             .duration(animateDudation)
             .call(xAxis);
-    return xAxisPassIn;
+
+        return xAxisPassIn;
     };
     
+    // functions for creating Y axis
     function yAxisF(xAxisPassIn, newYAxisScale){
+
         var yAxis = d3.axisLeft(newYAxisScale)
             
         xAxisPassIn
@@ -127,9 +112,12 @@ function makeResponsive() {
             .duration(animateDudation)
             .call(yAxis)
 
-    return xAxisPassIn;
+        return xAxisPassIn;
     };
+
+    // functions for creating grid
     function yGridF(gridPassIn, newYAxisScale){
+
         var grid = d3.axisLeft(newYAxisScale)
             .tickSize(chartWidth);
         
@@ -141,7 +129,7 @@ function makeResponsive() {
             .duration(animateDudation)
             .call(grid)
 
-    return gridPassIn;
+        return gridPassIn;
     };
 
     // functions for updating circles
@@ -157,19 +145,21 @@ function makeResponsive() {
 
     // functions for updating annotations
     function annotateUpdate(textgroup,newXAxisScale, newYAxisScale, chosenXLabel,chosenYLabel){
-            textgroup
-                .transition()
-                .duration(animateDudation)
-                .attr("x", d => newXAxisScale(d[chosenXLabel]))
-                .attr("y", d => newYAxisScale(d[chosenYLabel]))
+            
+        textgroup
+            .transition()
+            .duration(animateDudation)
+            .attr("x", d => newXAxisScale(d[chosenXLabel]))
+            .attr("y", d => newYAxisScale(d[chosenYLabel]))
 
     return textgroup;
     };
 
     // functions for creating AXIS LABELS
     function createLabel(labelgroup, id, labelText, indentLevel, statusClass, transform = "no"){
-    if (transform != "no"){
-        var labelItem = labelgroup
+        // position and orientation of label depend on passing-in variables
+        if (transform != "no"){
+            var labelItem = labelgroup
                 .attr("class","label")
                 .append("text")
                     .attr("class", statusClass + " aText")
@@ -179,9 +169,9 @@ function makeResponsive() {
                     .attr("y", -margin.left + (marginForLabel/3) * indentLevel )
                     .style("text-anchor","middle")
                     .text(labelText)
-    }
-    else {
-        var labelItem = labelgroup
+        }
+        else {
+            var labelItem = labelgroup
                 .attr("class","label")
                 .append("text")
                     .attr("class", statusClass + " aText")
@@ -190,31 +180,33 @@ function makeResponsive() {
                     .attr("y", chartHeight + 15 + (marginForLabel/3) * indentLevel)
                     .style("text-anchor","middle")
                     .text(labelText)
-    };
-    return labelItem;
+        };
+
+        return labelItem;
     };
     
     // functions for updating TOOLTIPS
     function updatingTooltips(circlesGroup, temCircle, textGroup, chosenXLabel,chosenYLabel){
 
+        // create/replace tooltips
         var toolTip = d3.tip()
             .attr("class", "d3-tip")
             .offset([60, -70])
-            // .html(function(d) {return`<b>${d.state}</b><br>${chosenXLabel}: ${d[chosenXLabel]}${xAxisUnit} <br> ${chosenYLabel}: ${d[chosenYLabel]}${yAxisUnit}`}
             .html(function(d) {return`<b>${d.Entity}</b><br>
-                ${chosenXLabel.split(" ")[0]}: ${Math.round(d[chosenXLabel],2)} <br> 
-                ${chosenYLabel.split(" ")[1]}: ${Math.round(d[chosenYLabel],2)}`}
+                GDP: $${Math.round(d[chosenXLabel],2)} <br> 
+                Subscription: ${Math.round(d[chosenYLabel],2)}<br>`}
             );
         
         chartGroup.call(toolTip);
         
+        // create event listener
         circlesGroup.on("mouseover", function(d) {
             toolTip.show(d, this);
-
+            
             d3.select(this)
                 .attr("opacity", 1);
 
-            // show temporary circle
+            // show a temporary circle that highlights the data point
             temCircle
                 .attr("cx",d3.select(this).attr("cx"))
                 .attr("cy",d3.select(this).attr("cy"))
@@ -222,6 +214,7 @@ function makeResponsive() {
                 .attr("stroke","blue")
                 .attr("stroke-width",2)
         })
+            
         circlesGroup.on("mouseout", function(d) {
             toolTip.hide(d);
 

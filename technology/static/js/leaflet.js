@@ -5,10 +5,9 @@
 // var selectedDataSet = mobiData
 // chosenYLabel
 
-// create a function to convert hsl color type to hex
-
 const fillOpacity = 0.8
 
+// create a function to convert hsl color type to hex
 function hslToHex(h, s, l) {
   l /= 100;
   const a = s * Math.min(l, 1 - l) / 100;
@@ -21,23 +20,13 @@ function hslToHex(h, s, l) {
 }
 
 
-
-function chooseColor(subscription, colorScale){
-  // return rgb(255, subscription, 153);
-  console.log(Math.round(colorScale(subscription)));
-  return hslToHex(233, 90, Math.round(colorScale(subscription),0));
-};
-
-
 function updateMap(selectedCountries,selectedYear,filteredData,chosenYLabel){
 
-  // clear existing map area if there was one
+  // clear existing map area this is to response to screen size changed
   var mapArea = d3.selectAll("#map");
-  if (!mapArea.empty()){
+  mapArea.remove()
 
-      mapArea.remove()
-  };
-
+  // add div for leaflet map again
   d3.select("#mapContainer")
     .append("div")
     .attr("id","map")
@@ -53,113 +42,209 @@ function updateMap(selectedCountries,selectedYear,filteredData,chosenYLabel){
       accessToken: API_KEY
     });
     
-      // create map object
-      var myMap = L.map("map", {
-        center: [ 20.6418, -68.0684],
-        zoom: 1.5,
-        layers: [outdoors]
-      });
-      
-      // loop through countriesdata, find a matching data in selected dataset and add value to it.
-      var minSubscription = 1000;
-      var maxSubscription = 0;
-      console.log(filteredData)
-      countriesData.features.forEach((boundary,index) => {
-        // for each country boundary, loop through the technology data and find matching country name and selected year
-        filteredData.forEach(tech => {
-          if (tech.Code == boundary.properties.iso_a3  && tech.Year == selectedYear){
-            var subscription = parseInt(tech[chosenYLabel]);
-            // store new data to country boundaries
-            countriesData.features[index].properties.value = subscription;
+    // create map object
+    var myMap = L.map("map", {
+      center: [21.6418, -30.0684],
+      zoom: 1.5,
+      layers: [outdoors, ]
+    });
+    
+    // loop through countriesdata, find a matching data in selected dataset and add value to it.
+    var minSubscription = 1000;
+    var maxSubscription = 0;
 
-            // update min and max subscription
-            if (minSubscription > subscription) {
-              minSubscription = subscription;
-            };
-            if (maxSubscription < subscription) {
-              maxSubscription = subscription;
-            };
-            // console.log("index" + index + tech.Entity + countriesData.features[index].properties.value  );
+    console.log(filteredData)
+    countriesData.features.forEach((boundary,index) => {
+      // for each country boundary, loop through the technology data and find matching country name and selected year
+      filteredData.forEach(tech => {
+        if (tech.Code == boundary.properties.iso_a3  && tech.Year == selectedYear){
+          var subscription = parseInt(tech[chosenYLabel]);
+          // store new data to country boundaries
+          countriesData.features[index].properties.value = subscription;
+
+          // update min and max subscription
+          if (minSubscription > subscription) {
+            minSubscription = subscription;
+          };
+          if (maxSubscription < subscription) {
+            maxSubscription = subscription;
+          };
+          // console.log("index" + index + tech.Entity + countriesData.features[index].properties.value  );
+        }
+      });
+    });
+    // });
+
+    // to generate color based on data value
+    var colorLinearScale = d3.scaleLinear()
+      .domain([0, 350])
+      .range([90,40]);
+    
+    function chooseColor(subscription){
+      // return rgb(255, subscription, 153);
+      // console.log(Math.round(colorScale(subscription)));
+      return hslToHex(233, 90, Math.round(colorLinearScale(subscription),0));
+    };
+
+    console.log(colorLinearScale(100))
+    console.log("max:" + maxSubscription)
+    console.log("min:" + minSubscription)
+
+    var otherCountriesBoundaries = []
+    var selectedCountriesBoundaries = []
+    
+    // functions to modify listeners 
+    // function highlightFeature(e) {
+    //   var layer = e.target;
+    //   info.update(layer.feature.properties);
+    // }
+    // function resetHighlight(e) {
+    //   info.update();
+    // }
+  
+    L.geoJson(countriesData, {
+      // Style each feature (in this case a country)
+      style: function(feature) {
+        
+        var boundaryColor= "white";
+        var lineWeight = 1
+        var countryName = feature.properties.name
+
+        if (selectedCountries.includes(countryName)){
+          boundaryColor= lightColor[selectedCountries.indexOf(countryName)];
+          // feature.openPopup()
+          lineWeight = 2
+          console.log(feature)
+        };
+
+        console.log(countryName + feature.properties.value + "L:" + colorLinearScale(feature.properties.value) + boundaryColor);
+
+        return {
+          color: boundaryColor,
+          // Call the chooseColor function to decide which color to color our country (color based on country)
+          fillColor: 	chooseColor(feature.properties.value),
+          fillOpacity: fillOpacity,
+          weight: lineWeight
+        };
+      },
+      // Called on each feature
+      onEachFeature: function(feature, layer) {
+        var countryName = feature.properties.name
+        if (selectedCountries.includes(countryName)){
+          selectedCountriesBoundaries.push(layer);
+          layer.bringToFront()
+        } else {
+          otherCountriesBoundaries.push(layer);
+        };
+
+        // Set mouse events to change map styling
+        layer.on({
+          // When a user's mouse touches a map feature, the mouseover event calls this function, that feature's opacity changes to 90% so that it stands out
+          mouseover: function(event) {
+            layer = event.target;
+            // highlightFeature(event);
+            // this.openPopup()
+            layer.setStyle({
+              fillOpacity: 0.9
+            });
+          },
+          // When the cursor no longer hovers over a map feature - when the mouseout event occurs - the feature's opacity reverts back to 50%
+          mouseout: function(event) {
+            // resetHighlight(event);
+            layer = event.target;
+            // this.closePopup()
+
+            layer.setStyle({
+              fillOpacity: fillOpacity
+            });
+          },
+          // When a feature (country) is clicked, it is enlarged to fit the screen
+          click: function(event) {
+            myMap.fitBounds(event.target.getBounds());
           }
         });
-      });
-      // });
-
-      // to generate color based on data value
-      var colorLinearScale = d3.scaleLinear()
-        .domain([minSubscription, maxSubscription])
-        .range([90,40]);
-      
-      console.log(countriesData)
-      console.log("max:" + maxSubscription)
-      console.log("min:" + minSubscription)
-
-      L.geoJson(countriesData, {
-        // Style each feature (in this case a country)
-        style: function(feature) {
-          
-          var boundaryColor= "white";
-          var lineWeight = 1
-          var countryName = feature.properties.name
-          if (selectedCountries.includes(countryName)){
-            boundaryColor= lightColor[selectedCountries.indexOf(countryName)];
-            // feature.openPopup()
-            lineWeight = 2
-            console.log(feature)
-          };
-
-          console.log(countryName + feature.properties.value + "L:" + colorLinearScale(feature.properties.value) + boundaryColor);
-
-          return {
-            color: boundaryColor,
-            // Call the chooseColor function to decide which color to color our country (color based on country)
-            fillColor: 	chooseColor(feature.properties.value,colorLinearScale),
-            fillOpacity: fillOpacity,
-            weight: lineWeight
-          };
-        },
-        // Called on each feature
-        onEachFeature: function(feature, layer) {
-          // Set mouse events to change map styling
-          layer.on({
-            // When a user's mouse touches a map feature, the mouseover event calls this function, that feature's opacity changes to 90% so that it stands out
-            mouseover: function(event) {
-              layer = event.target;
-              // this.openPopup()
-              layer.setStyle({
-                fillOpacity: 0.9
-              });
-            },
-            // When the cursor no longer hovers over a map feature - when the mouseout event occurs - the feature's opacity reverts back to 50%
-            mouseout: function(event) {
-              layer = event.target;
-              // this.closePopup()
-
-              layer.setStyle({
-                fillOpacity: fillOpacity
-              });
-            },
-            // When a feature (country) is clicked, it is enlarged to fit the screen
-            click: function(event) {
-              myMap.fitBounds(event.target.getBounds());
-            }
-          });
-          // Giving each feature a pop-up with information pertinent to it
-          var popUpDetails = feature.properties.value;
-          if (typeof feature.properties.value == "undefined"){
-            popUpDetails = "Unknown"
-          }
-          else {
-            popUpDetails += " per 100 people"
-          };
-
-          layer.bindPopup(`<b> ${feature.properties.name} </b><hr>
-            Subscription: ${popUpDetails} `
-          );
-    
+        // Giving each feature a pop-up with information pertinent to it
+        var popUpDetails = feature.properties.value;
+        if (typeof feature.properties.value == "undefined"){
+          popUpDetails = "Unknown"
         }
+        else {
+          popUpDetails += " per 100 people"
+        };
 
-      }).addTo(myMap);
+        layer.bindPopup(`<b> ${feature.properties.name} </b><hr>
+          Subscription: ${popUpDetails} `
+        );
+       
+      }
+
+    });
+
+    // ********************************************
+    // ********** INITIALIZE MAP LEGEND **********
+    // ********************************************
+    // configure legend location 
+    var legend = L.control({position: 'bottomright'});
   
+    legend.onAdd = function (){
+    
+        var div = L.DomUtil.create('div', 'info legend'),
+            subscriptionRange = [0, 50, 100, 150, 200, 250];
+            // subscriptionRange = [0, 10, 20, 30, 40, 50, 70, 90, 110, 350];
+    
+        // loop through our density intervals and generate a label with a colored square for each interval
+        for (var i = 0; i < subscriptionRange.length; i++) {
+            div.innerHTML +=
+                '<i style="background:' + chooseColor(subscriptionRange[i] ) + '" id ="legend' + i + '"></i> ' +
+                subscriptionRange[i] + (subscriptionRange[i + 1] ? '&ndash;' + subscriptionRange[i + 1] + '<br>' : '+');
+        }
+        return div;
+    };
+
+    var subscriptionRange = [0, 50, 100, 150, 200, 250];
+    for (var i = 0; i < subscriptionRange.length; i++) {
+      var Legend = d3.selectAll("#" + "legend" + i)
+      console.log("#" + "legend" + i);
+      Legend.on("mouseover", function(d) {
+        console.log("hello")
+      }); 
+
+      Legend.on("mouseout", function(d) {
+        console.log("bye")
+      });    
+    };
+
+    legend.addTo(myMap);
+
+    var selectedCountriesBoundariesLayer = L.layerGroup(selectedCountriesBoundaries).addTo(myMap);
+    var otherCountriesBoundariesLayer = L.layerGroup(otherCountriesBoundaries).addTo(myMap);
+    
+    var overlayMaps = {
+      "Selected countries": selectedCountriesBoundariesLayer ,
+      "Other countries": otherCountriesBoundariesLayer
+    }
+
+    L.control.layers({"Outdoor" : outdoors}, overlayMaps, {collapsed: false}).addTo(myMap);
+
+    // add custom information control
+    // var info = L.control();
+
+    // info.onAdd = function (map) {
+    //     this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+    //     this.update();
+    //     return this._div;
+    // };
+
+    // // method that we will use to update the control based on feature properties passed
+    // info.update = function (props) {
+    //     this._div.innerHTML = '<h4>US Population Density</h4>' +  (props ?
+    //         '<b>' +feature.properties.name + '</b><br />' + feature.properties.value + ' per 100 people'
+    //         : 'Hover over a country');
+    // };
+
+    // info.addTo(map);
+
+    console.log(selectedCountriesBoundariesLayer)
+    
   });
 };
