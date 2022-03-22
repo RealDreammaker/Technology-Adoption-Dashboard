@@ -16,7 +16,7 @@ We have created a dashboard with 3 visualizations that include a heat map, line 
 
 **Development process and technologies**
 
-We have uploaded the data to a database server using Flask API and designed a web page using HTML and CSS to show the dashboard. We deployed the dashboard using Heroku. 
+We have uploaded the data to a database server using Flask API and designed a web page using HTML and CSS to show the dashboard. Dashboard was deployed using Heroku. 
  
 
 **Links**
