@@ -40,36 +40,57 @@
   <!-- Leaflet-Choropleth JavaScript -->
   <!-- <script type="text/javascript" src="../static/js/choropleth.js"></script> -->
   
-  <div class="jumbotron jumbotron-fluid" style="background-color: #5DADE2">
-    <div class="container">
+  <div class="container">
+    <div class="jumbotron jumbotron-fluid" style="background-color: #5DADE2">
       <h1 class="display-4">Technology Adoption</h1>
-          </div>
-            </div>
-    <div class="row">
-    <div class="col-md-4">
-    <div class="slidecontainer">
-      <label for="customRange2" class="form-label"></label>
-        <input type="range" class="form-range" min="0" max="5" id="customRange2">    
-          </div>        
-    <div class="row">
-    <div class="col-md-2">
-        <div class="country">
-          <h5>Country</h5>
-            <select id="selectDataset" onchange="optionChanged(this.value)"></select> 
-                </div>
-    <div class="row">
-      <div id="mapContainer" class="col-xs-6  col-md-12 mapContainer">
-        <div id="map"></div>
-      </div>
-      </div>
-      <div class="col-xs-6  col-md-6">
-        <div id="scatter"> </div>
-      </div>
     </div>
+   
+      <div class="row">
+        <div class="col-md-12">
+          <div class="slidecontainer">
+            <label for="customRange2" class="form-label"></label>
+              <input type="range" class="form-range" min="0" max="5" id="customRange2">    
+          </div>  
+        </div>
+      </div>
+    
+      <div class="row">
 
-    <div class="col-xs-6  col-md-6">
-      <div id="bubble"></div>
-    </div>
+          <div class="col-md-2">
+
+            <form action="#selectCountry">
+              <label for="selectDataset">Select countries</label>
+              <select name="Select countries" id="selectDataset" multiple>
+                
+              </select>
+              <input type="submit" value="Submit" />
+          </form>
+            <!-- <div class="country">
+              <h5>Country</h5>
+                <select id="selectDataset" onchange="optionChanged(this.value)"></select> 
+            </div> -->
+          </div>
+
+        <div class="col-xs-5  col-md-5">
+            <div id="scatter"> </div>
+        </div>
+        <div class="col-xs-5  col-md-5">
+          <div id="my_dataviz"></div>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div id="mapContainer" class="col-xs-12  col-md-12 mapContainer">
+          <div id="map"></div>
+        </div>
+      </div>
+      
+  </div>
+    
+
+
+      </div>
   </div>
 </div>
   <!-- Footer-->
@@ -81,7 +102,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.min.js"></script>
   <script type="text/javascript" src="../static/js/config.js"></script>
   <script type="text/javascript" src="../static/js/leaflet.js"></script>
-  <!-- <script type="text/javascript" src="../static/js/linecharts.js"></script> -->
+  <script type="text/javascript" src="../static/js/linecharts.js"></script>
   <script type="text/javascript" src="../static/js/bubblecharts.js"></script>
 
   <!-- for deloying app -->
