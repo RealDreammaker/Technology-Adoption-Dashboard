@@ -5,4 +5,5 @@ d3.json('/api/countries').then(function(data){
     .data(data)
     .enter()
     .append("option")
-    .text(function(d){return d});
+    .text(function(d){return d})
+});
