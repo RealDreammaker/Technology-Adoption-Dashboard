@@ -66,14 +66,9 @@ def mobile():
 # not working route
 @app.route('/api/countries')
 def countries():
-     country_results = db.session.query(Countries.entity)
-     country_data = []
-     for entity in country_results:
-         dict_var={}
-         dict_var['entity'] = entity
-
-         country_data.append(dict_var)
-     return jsonify(country_data)
+    country_results = db.session.query(Countries.entity,Countries.id)
+    country_data = [result[0] for result in country_results]
+    return jsonify(country_data)
 
 if __name__ == '__main__':
     app.run(debug=True)
