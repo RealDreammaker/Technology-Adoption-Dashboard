@@ -4,10 +4,13 @@ var selectedCountries = ["Australia","Germany","Japan", "Russia","China","Canada
 var selectedYear = "2019"; 
 var lightColor = ["lime","cyan","green","purple","yellow","orange","magenta","red","blue","pink"];
 
-const selectedDataSet = "../static/data/mobile-phone-subscriptions-vs-gdp-per-capita.csv"
-const chosenYLabel = "Mobile cellular subscriptions (per 100 people)";
-const chosenXLabel =  "GDP per capita, PPP (constant 2017 international $)"
+// const selectedDataSet = "../static/data/mobile-phone-subscriptions-vs-gdp-per-capita.csv"
+const YLabel = "Mobile cellular subscriptions (per 100 people)";
+const XLabel =  "GDP per capita, PPP (constant 2017 international $)"
 
+const selectedDataSet = "/api/mobile"
+const chosenYLabel = "subscriptions";
+const chosenXLabel =  "gdp"
 // create a responsive chart to window size
 function makeResponsive() {
     
@@ -51,9 +54,6 @@ function makeResponsive() {
     var chartGroup = svg.append("g")
         .attr("transform",`translate(${margin.left},${margin.top})`);
 
-
-    console.log(chosenYLabel)
-    console.log(selectedDataSet)
 
     // ******************************************************
     // *************** SETTING UP FUNCTIONS *****************
@@ -192,14 +192,14 @@ function makeResponsive() {
         var toolTip = d3.tip()
             .attr("class", "d3-tip")
             .offset([60, -70])
-            .html(function(d) {return`<b>${d.Entity}</b><br>
+            .html(function(d) {return`<b>${d.entity}</b><br>
                 GDP: $${Math.round(d[chosenXLabel],2)} <br> 
                 Subscription: ${Math.round(d[chosenYLabel],2)}<br>`}
             );
         
         chartGroup.call(toolTip);
         
-        // create event listener
+        // create event listener when user have mouse on data the point
         circlesGroup.on("mouseover", function(d) {
             toolTip.show(d, this);
             
@@ -257,7 +257,8 @@ function makeResponsive() {
     // ******* DATA EXTRACTION and CHARTS SKETCHING *********
     // ******************************************************
     // 
-    d3.csv(selectedDataSet).then(function(rawdata){
+    // d3.csv(selectedDataSet).then(function(rawdata){
+    d3.json(selectedDataSet).then(function(rawdata){
 
         console.log(rawdata)
         console.log("Year:" + selectedYear)
@@ -273,7 +274,7 @@ function makeResponsive() {
         
         // filter rawdata by year and selected countries
         data = filteredData.filter(function(d){
-            if ((d.Year == selectedYear) && (selectedCountries.includes(d.Entity))) {
+            if ((d.year == selectedYear) && (selectedCountries.includes(d.entity))) {
                 return d;
             }
         });
@@ -283,7 +284,7 @@ function makeResponsive() {
         // parse data from string to integer
         data.forEach(function(d){
             d[chosenYLabel] = +d[chosenYLabel];
-            d["GDP per capita, PPP (constant 2017 international $)"] = +d["GDP per capita, PPP (constant 2017 international $)"];
+            d[chosenXLabel] = +d[chosenXLabel];
             d.year = +d.year; 
         });
 
@@ -311,10 +312,9 @@ function makeResponsive() {
             .append("circle")
                 .attr("class", "circles")
                 .attr("r", d => parseInt(d[chosenYLabel]))
-                // .attr("fill",circleColor)
                 .attr("opacity", circleOpacity)
                 // choose color based on index of seleted country
-                .attr("fill",d => lightColor[selectedCountries.indexOf(d.Entity)] )
+                .attr("fill",d => lightColor[selectedCountries.indexOf(d.entity)] )
 
         // update circles 
         circlesGroup = circlesGroupF(circlesGroup,xScale,yScale,chosenXLabel,chosenYLabel);
@@ -325,14 +325,13 @@ function makeResponsive() {
             .data(data)
             .enter()
             .append("text")
-                // .transition()
-                // .duration(animateDudation)
                 .attr("class","abbrState aText")
                 //adjusted so text-anchor can move vertically
                 .attr("dy","0.3em")
+                // stamp alt details for  referencing later on
                 .attr("alt",d => parseInt(d[chosenYLabel]))
-                .text(d => d.Entity.substring(0,2).toUpperCase())
-                .text(d => d.Entity)
+                .text(d => d.entity.substring(0,2).toUpperCase())
+                .text(d => d.entity)
 
         // update annotation of abreviated state name to each circle
         textGroup = annotateUpdate(textGroup,xScale, yScale, chosenXLabel,chosenYLabel);
@@ -349,68 +348,10 @@ function makeResponsive() {
         // add labels for all axis
         var labelGroup = chartGroup.append("g");
 
-        var telephoneLabel = createLabel(labelGroup, "telephone", chosenYLabel,1 , "active", "transform")
-        // var ageLabel = createLabel(labelGroup, "age", "Age (Median)",2 , "inactive")
-        // var incomeLabel = createLabel(labelGroup, "income", "Household Income (Median)",3 , "inactive")
-        // var obeseLabel = createLabel(labelGroup, "obesity", "Obese (%)",1 , "inactive", "transform")
-        // var smokeLabel = createLabel(labelGroup, "smokes", "Smoke (%)",2 , "inactive", "transform")
-        var gdpLabel = createLabel(labelGroup, "GDP", chosenXLabel,1 , "active")
+        createLabel(labelGroup, "mobile", YLabel ,1 , "active", "transform")
+        createLabel(labelGroup, "GDP", XLabel ,1 , "active")
 
-
-    // **************************************************************************
-    // ********* HANDLING PROCEDURE WHEN A DIFFERENT LABEL WAS CHOSEN  **********
-    // **************************************************************************
-        labelGroup.selectAll("text").on("click", function(){
-
-            var newChoosenLabel = d3.select(this).property("id");
-            var xAxisLabels = ["telephone","age","income"]
-
-            // only update if there was a different label selected
-            if (![chosenXLabel,chosenYLabel].includes(newChoosenLabel)){
-                
-                // reset class for current labels to inactive
-                d3.select("#" + chosenXLabel).attr("class", "inactive aText")
-                d3.select("#" + chosenYLabel).attr("class", "inactive aText")
-                
-
-                // check which label was clicked and update the chosen one
-                if (xAxisLabels.includes(newChoosenLabel)) {
-                    chosenXLabel =  newChoosenLabel;
-                }
-                else {
-                    chosenYLabel =  newChoosenLabel;
-                };
-                
-
-                // update class for new labels chosen to active
-                d3.select("#" + chosenXLabel).attr("class", "active aText")
-                d3.select("#" + chosenYLabel).attr("class", "active aText")
-                   
-
-                // update scales
-                xScale = xScaleF(data,chosenXLabel)
-                yScale = yScaleF(data,chosenYLabel)
-
-
-                // update axis
-                xAxisF(xAxis, xScale);
-                yAxisF(yAxis, yScale);
-                yGridF(grid, yScale);
-
-
-                // update circles 
-                circlesGroup = circlesGroupF(circlesGroup,xScale,yScale,chosenXLabel,chosenYLabel);
-
-                
-                // update annotation of abreviated state name to each circle
-                textGroup = annotateUpdate(textGroup,xScale, yScale, chosenXLabel,chosenYLabel);
-                
-                // update tooltips
-                updatingTooltips(circlesGroup,  temCircle,  textGroup, chosenXLabel,chosenYLabel)
-            };
-        });
-
-    updateMap(selectedCountries,selectedYear, filteredData ,chosenYLabel)    
+    updateMap(selectedCountries, selectedYear, filteredData , chosenYLabel)    
     // updateLineChart(selectedCountries,selectedYear, filteredData ,chosenYLabel)
         
     }).catch(function(error){
