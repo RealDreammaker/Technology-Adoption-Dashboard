@@ -15,6 +15,8 @@ For this project we explored the dataset related to adoption of mobile phones ac
 We have created a dashboard with 3 visualizations that include a heat map, line chart and bubble chart with an ability to change the charts based on the country selection and year. These visualisations show the number of mobile telephone subscriptions, measured as the number per 100 people versus gross domestic product (GDP) per capita.
 
 **Development process and technologies**
+We have uploaded the data to a database server using Flask API and designed a web page using HTML and CSS to show the dashboard. We deployed the dashboard using Heroku. 
+ 
 
 **Links**
 * Application
