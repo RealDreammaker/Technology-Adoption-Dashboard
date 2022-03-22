@@ -12,7 +12,7 @@ app = Flask(__name__)
 ###DATABASE SETUP###
 from flask_sqlalchemy import SQLAlchemy
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', '') or "postgresql://postgres:postgres@localhost:5432/technology_db"
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', '') or "postgresql://postgres:38364431@localhost:5432/technology_db"
 
 # Remove tracking modifications
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -48,28 +48,25 @@ def mobile():
 
     mobile_results = db.session.query(Mobile.entity, Mobile.code, Mobile.year, Mobile.mobile_subscriptions, Mobile.gdp).all()
 
-    entity = [result[0] for result in mobile_results]
-    code = [result[1] for result in mobile_results]
-    year = [result[2] for result in mobile_results]
-    subscriptions = [result[3] for result in mobile_results]
-    gdp = [result[4] for result in mobile_results]
-
-    mobile_data = [{
-        "entity":entity,
-        "code":code,
-        "year":year,
-        "subscriptions":subscriptions,
-        "gdp":gdp
-    }]
+    mobile_data = []
+    for entity, code, year, mobile, gdp in mobile_results:
+        dict_var = {}
+        dict_var['entity'] = entity
+        dict_var['code'] = code
+        dict_var['year'] = year
+        dict_var['subscriptions'] = mobile
+        dict_var['gdp'] = gdp
+        
+        mobile_data.append(dict_var)
 
     return jsonify(mobile_data)
 
-
-@app.route('/api/geojson')
-def geojson():
-    geojson_results = db.session.query(Geojson.geojson)
-    geojson = [result[0] for result in geojson_results]
-    return jsonify(geojson)
+# not working route
+# @app.route('/api/geojson')
+# def geojson():
+#     geojson_results = db.session.query(Geojson.geojson)
+#     # geojson = [result[0] for result in geojson_results]
+#     return jsonify(geojson_results)
 
 if __name__ == '__main__':
     app.run(debug=True)

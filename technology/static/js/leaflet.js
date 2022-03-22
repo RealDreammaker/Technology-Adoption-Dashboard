@@ -5,7 +5,11 @@
 // var selectedDataSet = mobiData
 // chosenYLabel
 
+// KELVIN TO CHANGE TO URL BEFORE APP DEPLOYMENT
+
 const fillOpacity = 0.8
+const url ="https://raw.githubusercontent.com/RealDreammaker/Project_2/main/technology/static/data/countries.geojson"
+// const url = "/api/geojson"
 
 // create a function to convert hsl color type to hex
 function hslToHex(h, s, l) {
@@ -32,8 +36,10 @@ function updateMap(selectedCountries,selectedYear,filteredData,chosenYLabel){
     .attr("id","map")
 
   // Read in country boundaries
-  d3.json("../static/data/countries.geojson").then(function(countriesData){
-  
+  // d3.json("../static/data/countries.geojson").then(function(countriesData){
+  d3.json(url).then(function(countriesData){
+    console.log(countriesData)
+
     // create tile layer
     var outdoors = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
       attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
@@ -49,15 +55,18 @@ function updateMap(selectedCountries,selectedYear,filteredData,chosenYLabel){
       layers: [outdoors, ]
     });
     
-    // loop through countriesdata, find a matching data in selected dataset and add value to it.
+    // variable for console log TO BE REMOVED
     var minSubscription = 1000;
     var maxSubscription = 0;
-
+    
     console.log(filteredData)
+
+    // loop through countriesdata, find a matching data in selected dataset and add value to it.
     countriesData.features.forEach((boundary,index) => {
+
       // for each country boundary, loop through the technology data and find matching country name and selected year
       filteredData.forEach(tech => {
-        if (tech.Code == boundary.properties.iso_a3  && tech.Year == selectedYear){
+        if (tech.code == boundary.properties.iso_a3  && tech.year == selectedYear){
           var subscription = parseInt(tech[chosenYLabel]);
           // store new data to country boundaries
           countriesData.features[index].properties.value = subscription;
@@ -69,20 +78,17 @@ function updateMap(selectedCountries,selectedYear,filteredData,chosenYLabel){
           if (maxSubscription < subscription) {
             maxSubscription = subscription;
           };
-          // console.log("index" + index + tech.Entity + countriesData.features[index].properties.value  );
         }
       });
     });
-    // });
 
     // to generate color based on data value
     var colorLinearScale = d3.scaleLinear()
       .domain([0, 350])
       .range([90,40]);
     
+    // color with be adjusted according to number of subscription
     function chooseColor(subscription){
-      // return rgb(255, subscription, 153);
-      // console.log(Math.round(colorScale(subscription)));
       return hslToHex(233, 90, Math.round(colorLinearScale(subscription),0));
     };
 
@@ -105,7 +111,7 @@ function updateMap(selectedCountries,selectedYear,filteredData,chosenYLabel){
     L.geoJson(countriesData, {
       // Style each feature (in this case a country)
       style: function(feature) {
-        
+        // set default boundary color to white
         var boundaryColor= "white";
         var lineWeight = 1
         var countryName = feature.properties.name
@@ -130,6 +136,8 @@ function updateMap(selectedCountries,selectedYear,filteredData,chosenYLabel){
       // Called on each feature
       onEachFeature: function(feature, layer) {
         var countryName = feature.properties.name
+
+        // filter countries to highlighted one if selected
         if (selectedCountries.includes(countryName)){
           selectedCountriesBoundaries.push(layer);
           layer.bringToFront()
@@ -191,7 +199,9 @@ function updateMap(selectedCountries,selectedYear,filteredData,chosenYLabel){
         var div = L.DomUtil.create('div', 'info legend'),
             subscriptionRange = [0, 50, 100, 150, 200, 250];
             // subscriptionRange = [0, 10, 20, 30, 40, 50, 70, 90, 110, 350];
-    
+
+        // for countries without data, give black color
+        div.innerHTML = '<i style="background:#000000"></i> No Data<br>';
         // loop through our density intervals and generate a label with a colored square for each interval
         for (var i = 0; i < subscriptionRange.length; i++) {
             div.innerHTML +=
@@ -201,6 +211,7 @@ function updateMap(selectedCountries,selectedYear,filteredData,chosenYLabel){
         return div;
     };
 
+    // create event listener for legend box when user hover over it
     var subscriptionRange = [0, 50, 100, 150, 200, 250];
     for (var i = 0; i < subscriptionRange.length; i++) {
       var Legend = d3.selectAll("#" + "legend" + i)
