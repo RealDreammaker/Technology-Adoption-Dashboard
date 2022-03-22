@@ -1,0 +1,1 @@
+web: gunicorn technology.app:app

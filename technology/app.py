@@ -32,15 +32,6 @@ class Mobile(db.Model):
     mobile_subscriptions = db.Column(db.Float)
     gdp = db.Column(db.Float)
 
-class Fixed(db.Model):
-    __tablename__ = 'fixed_telephone'
-    id = db.Column(db.Integer, primary_key=True)
-    entity = db.Column(db.String(255))
-    code = db.Column(db.String(255))
-    year = db.Column(db.Integer)
-    fixed_subscriptions = db.Column(db.Float)
-    gdp = db.Column(db.Float)
-
 class Geojson(db.Model):
     geojson = db.Column(db.JSON)
     id = db.Column(db.Integer, primary_key=True)
@@ -51,28 +42,6 @@ class Geojson(db.Model):
 def home():
       
     return render_template("index.html")
-
-#retrieve data from database
-@app.route('/api/fixed')
-def fixed():
-
-    fixed_results = db.session.query(Fixed.entity, Fixed.code, Fixed.year, Fixed.fixed_subscriptions, Fixed.gdp).all()
-
-    entity = [result[0] for result in fixed_results]
-    code = [result[1] for result in fixed_results]
-    year = [result[2] for result in fixed_results]
-    subscriptions = [result[3] for result in fixed_results]
-    gdp = [result[4] for result in fixed_results]
-
-    fixed_data = [{
-        "entity":entity,
-        "code":code,
-        "year":year,
-        "subscriptions":subscriptions,
-        "gdp":gdp
-    }]
-
-    return jsonify(fixed_data)
 
 @app.route('/api/mobile')
 def mobile():
