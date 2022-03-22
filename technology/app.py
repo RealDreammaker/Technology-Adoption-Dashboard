@@ -62,7 +62,6 @@ def mobile():
 
     return jsonify(mobile_data)
 
-# not working route
 @app.route('/api/countries')
 def countries():
     country_results = db.session.query(Countries.entity,Countries.id)
