@@ -12,7 +12,7 @@ app = Flask(__name__)
 ###DATABASE SETUP###
 from flask_sqlalchemy import SQLAlchemy
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', '') or "postgresql://postgres:38364431@localhost:5432/technology_db"
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', '') or "postgresql://postgres:postgres@localhost:5432/technology_db"
 
 # Remove tracking modifications
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -32,8 +32,9 @@ class Mobile(db.Model):
     mobile_subscriptions = db.Column(db.Float)
     gdp = db.Column(db.Float)
 
-class Geojson(db.Model):
-    geojson = db.Column(db.JSON)
+class Countries(db.Model):
+    __tablename__ = 'countries'
+    entity = db.Column(db.String(255))
     id = db.Column(db.Integer, primary_key=True)
 
 ###ROUTES###

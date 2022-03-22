@@ -117,7 +117,7 @@ function updateMap(selectedCountries,selectedYear,filteredData,chosenYLabel){
         var countryName = feature.properties.name
 
         if (selectedCountries.includes(countryName)){
-          boundaryColor= lightColor[selectedCountries.indexOf(countryName)];
+          boundaryColor= lightColors[selectedCountries.indexOf(countryName)];
           // feature.openPopup()
           lineWeight = 2
           console.log(feature)
