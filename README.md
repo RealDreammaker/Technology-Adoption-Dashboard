@@ -20,5 +20,5 @@ We have uploaded the data to a database server using Flask API and designed a we
  
 
 **Links**
-* Application
-* Project presentation
+* [Application](https://technologyadoption.herokuapp.com/)
+* [Project presentation](https://www.canva.com/design/DAE7Zl4m7Hc/YRmcR02giW9PzyiMosw0zw/view?utm_content=DAE7Zl4m7Hc&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink)
