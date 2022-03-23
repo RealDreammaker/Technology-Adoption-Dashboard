@@ -73,7 +73,7 @@ function updateLineChart(selectedCountries,selectedYear,filteredData,chosenYLabe
 
   // Add X axis --> it is a date format
   var x = d3.scaleLinear()
-    .domain([1987,2021])
+    .domain([1987,2019])
     .range([ 0, chartWidth ]);
 
   chartGroup.append("g")

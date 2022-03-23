@@ -1,15 +1,6 @@
-// requirement: data from 3 sources
-// input: country name and year
-// var selectedCountries = ["Australia","Germany","Japan", "Russia","China"];
-// var selectedYear = "2019"; 
-// var selectedDataSet = mobiData
-// chosenYLabel
-
-// KELVIN TO CHANGE TO URL BEFORE APP DEPLOYMENT
 
 const fillOpacity = 0.8
 const url ="https://raw.githubusercontent.com/RealDreammaker/Project_2/main/technology/static/data/countries.geojson"
-// const url = "/api/geojson"
 
 // create a function to convert hsl color type to hex
 function hslToHex(h, s, l) {
@@ -22,7 +13,6 @@ function hslToHex(h, s, l) {
   };
   return `#${f(0)}${f(8)}${f(4)}`;
 }
-
 
 function updateMap(selectedCountries,selectedYear,filteredData,chosenYLabel){
 
@@ -182,10 +172,8 @@ function updateMap(selectedCountries,selectedYear,filteredData,chosenYLabel){
 
         layer.bindPopup(`<b> ${feature.properties.name} </b><hr>
           Subscription: ${popUpDetails} `
-        );
-       
+        );     
       }
-
     });
 
     // ********************************************
@@ -211,7 +199,7 @@ function updateMap(selectedCountries,selectedYear,filteredData,chosenYLabel){
         return div;
     };
 
-    // create event listener for legend box when user hover over it
+    // create event listener for legends:
     var subscriptionRange = [0, 50, 100, 150, 200, 250];
     for (var i = 0; i < subscriptionRange.length; i++) {
       var Legend = d3.selectAll("#" + "legend" + i)
@@ -227,7 +215,11 @@ function updateMap(selectedCountries,selectedYear,filteredData,chosenYLabel){
 
     legend.addTo(myMap);
 
+    // ******************************************************
+    // ******* INITIALIZE CONTROL for COUNTRY LAYERS ********
+    // ******************************************************
     var selectedCountriesBoundariesLayer = L.layerGroup(selectedCountriesBoundaries).addTo(myMap);
+
     var otherCountriesBoundariesLayer = L.layerGroup(otherCountriesBoundaries).addTo(myMap);
     
     var overlayMaps = {
@@ -235,27 +227,7 @@ function updateMap(selectedCountries,selectedYear,filteredData,chosenYLabel){
       "Other countries": otherCountriesBoundariesLayer
     }
 
+    // create object to control layers 
     L.control.layers({"Outdoor" : outdoors}, overlayMaps, {collapsed: false}).addTo(myMap);
-
-    // add custom information control
-    // var info = L.control();
-
-    // info.onAdd = function (map) {
-    //     this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
-    //     this.update();
-    //     return this._div;
-    // };
-
-    // // method that we will use to update the control based on feature properties passed
-    // info.update = function (props) {
-    //     this._div.innerHTML = '<h4>US Population Density</h4>' +  (props ?
-    //         '<b>' +feature.properties.name + '</b><br />' + feature.properties.value + ' per 100 people'
-    //         : 'Hover over a country');
-    // };
-
-    // info.addTo(map);
-
-    console.log(selectedCountriesBoundariesLayer)
-    
   });
 };
