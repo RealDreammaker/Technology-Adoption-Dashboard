@@ -55,40 +55,38 @@
       </div>
     
       <div class="row">
-
-          <div class="col-md-2">
-
-            <form action="#selectCountry">
-              <label for="selectDataset">Select countries</label>
-              <select name="Select countries" id="selectDataset" multiple>
-                
-              </select>
-              <input type="submit" value="Submit" />
-          </form>
-            <!-- <div class="country">
-              <h5>Country</h5>
-                <select id="selectDataset" onchange="optionChanged(this.value)"></select> 
-            </div> -->
-          </div>
-
-        <div class="col-xs-5  col-md-5">
-            <div id="scatter"> </div>
-        </div>
-        <div class="col-xs-5  col-md-5">
-          <div id="my_dataviz"></div>
-        </div>
-      </div>
-
-
-      <div class="row">
         <div id="mapContainer" class="col-xs-12  col-md-12 mapContainer">
           <div id="map"></div>
         </div>
       </div>
       
   </div>
-    
 
+  <div class="row">
+
+      <div class="col-2">
+
+        <form action="#selectCountry">
+         <label for="selectDataset">Select countries</label>
+          <select class="form-select form-select-lg" size="10" id="selectDataset" multiple>
+          </select>
+          <button type="button" class="btn btn-primary">Submit</button>
+        </form>
+      <!-- <div class="country">
+        <h5>Country</h5>
+          <select id="selectDataset" onchange="optionChanged(this.value)"></select> 
+      </div> -->
+      </div>
+    
+      <div class="col-5">
+      <div id="scatter"> </div>
+    </div>
+    
+    <div class="col-5">
+      <div id="my_dataviz"></div>
+   </div>
+  
+  </div>
 
       </div>
   </div>
