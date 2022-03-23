@@ -1,7 +1,8 @@
 // requirement:
 // input data: an array of country names and selected year
 var selectedCountries = ["Australia","Germany","Japan", "Russia","China","Canada", "Brazil", "Mexico"];
-var selectedYear = "2019"; 
+var selectedYear = "2019";
+
 var lightColors = ["lime","cyan","green","purple","yellow","orange","magenta","red","blue","pink"];
 
 // const selectedDataSet = "../static/data/mobile-phone-subscriptions-vs-gdp-per-capita.csv"
@@ -16,14 +17,16 @@ const chosenXLabel =  "gdp"
 const marginForLabel = 15;
 const animateDudation = 1000;
 const circleOpacity = 0.5; 
+
+
+
 // create a responsive chart to window size
-function makeResponsive() {
+function makeResponsive(selectedCountries,selectedYear) {
     
     // ******************************************************
     // **************** SETTING UP SVG AREA  ****************
     // ******************************************************
 
-    
     // clear existing svg area if there was one
     var svgArea = d3.selectAll("svg");
     if (!svgArea.empty()){
@@ -363,8 +366,4 @@ function makeResponsive() {
 };
 
 
-
-makeResponsive();
-
-d3.select(window).on("resize", makeResponsive)
-
+d3.select(window).on("resize", makeResponsive(selectedCountries,selectedYear))

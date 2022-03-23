@@ -34,33 +34,26 @@
   <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.3/d3.min.js"></script> -->
   <script src="https://d3js.org/d3.v5.min.js"></script>
   
-	<!-- MomentJS -->
-  <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script> -->
-
-  <!-- Leaflet-Choropleth JavaScript -->
-  <!-- <script type="text/javascript" src="../static/js/choropleth.js"></script> -->
-  
+	 
   <div class="container-fluid">
     <div class="jumbotron jumbotron-fluid" style="background-color: #5DADE2">
       <h1 class="display-4">Technology Adoption</h1>
     </div>
-   
-      <div class="row">
-        <div class="col-md-12">
-          <div class="slidecontainer">
-            <label for="customRange2" class="form-label"></label>
-              <input type="range" class="form-range" min="0" max="5" id="customRange2">    
-          </div>  
-        </div>
-      </div>
-    
+      
       <div class="row">
         <div id="mapContainer">
           <div id="map"></div>
         </div>
       </div>
       
-  
+      <div class="row">
+        <div class="col-md-12">
+          <div class="slidecontainer">
+            <label for="customRange2" class="form-label">2019</label>
+              <input type="range" class="form-range" min="1987" max="2019" id="customRange2">    
+          </div>  
+        </div>
+      </div>
 
   <div class="row">
 
@@ -68,14 +61,11 @@
 
         <form action="#selectCountry">
          <label for="selectDataset">Select countries</label>
-          <select class="form-select form-select-lg" size="10" id="selectDataset" multiple>
+          <select class="form-select form-select-lg" size="15" id="selectDataset" multiple>
           </select>
           <button type="button" class="btn btn-secondary">Submit</button>
         </form>
-      <!-- <div class="country">
-        <h5>Country</h5>
-          <select id="selectDataset" onchange="optionChanged(this.value)"></select> 
-      </div> -->
+      
       </div>
     
       <div class="col-xs-12 col-sm-5 col-md-5">
@@ -89,11 +79,9 @@
   </div>
 
 </div>
-  <!-- Footer-->
-  <div id="footer">
-  </div>
+  
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.min.js"></script>
   <script type="text/javascript" src="../static/js/config.js"></script>
