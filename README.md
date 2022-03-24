@@ -21,7 +21,7 @@ We have created a dashboard with 3 visualizations that include a heat map, line 
 2. We have uploaded [the technology adoption data](technology/static/data/mobile-phone-subscriptions-vs-gdp-per-capita.csv) to PostgreSQL database server using Flask API application
 3. GeoJON data for map is assessed by using d3 queries to [link](https://raw.githubusercontent.com/RealDreammaker/Project_2/main/technology/static/data/countries.geojson) on GitHub
 4.We used multiple selection menu and slider as new features for user interaction. 
-5. All three visualizations are updated simultaneously when user submit their selection or select year from the slider
+5. All three visualizations are responsive to window size are updated simultaneously when user submit their selection or select year from the slider
    - [multiple selection menu and slider js code](technology/static/js/filter.js) 
    - [Leaflet map js code](technology/static/js/leaflet.js)
    - [Bubble chart js code](technology/static/js/bubblecharts.js)
