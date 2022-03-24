@@ -358,7 +358,7 @@ function makeResponsive(selectedCountries,selectedYear) {
         createLabel(labelGroup, "GDP", XLabel  , "active")
 
     updateMap(selectedCountries, selectedYear, filteredData , chosenYLabel)    
-    updateLineChart(selectedCountries,selectedYear, filteredData ,chosenYLabel, lightColors)
+    updateLineChart(selectedCountries, filteredData ,chosenYLabel, lightColors)
         
     }).catch(function(error){
         return console.warn(error);
