@@ -1,9 +1,9 @@
 # Project_2
 
 ## Project team: ##
-* Kelvin Nguyen,
-* Matt Suffra,
-* Anita Rynkanen,
+* Kelvin Nguyen
+* Matt Suffra
+* Anita Rynkanen
 * Raymond Chau
 
 ## Data source ##
